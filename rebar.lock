@@ -1,1 +1,6 @@
-[].
+[{<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.8">>},2},
+ {<<"lager">>,{pkg,<<"lager">>,<<"3.2.1">>},1},
+ {<<"quickrand">>,{pkg,<<"quickrand">>,<<"1.3.3">>},2},
+ {<<"sumo_db">>,{pkg,<<"sumo_db">>,<<"0.6.1">>},0},
+ {<<"uuid">>,{pkg,<<"uuid_erl">>,<<"1.5.2-rc1">>},1},
+ {<<"worker_pool">>,{pkg,<<"worker_pool">>,<<"2.0.1">>},1}].
