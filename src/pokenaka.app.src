@@ -1,0 +1,10 @@
+{application, pokenaka, [
+  {description, "Gonna catch 'em all!"},
+  {vsn, "1.0.0"},
+  {id, "pokenaka"},
+  {registered, []},
+  {applications, [kernel, stdlib]},
+  {modules, []},
+  {mod, {poke, noargs}},
+  {env, []}
+ ]}.
