@@ -37,4 +37,20 @@ start_phase(create_schema, _StartType, []) ->
   end,
   {ok, _} = application:ensure_all_started(mnesia),
   % Create persistency schema
-  sumo:create_schema().
+  sumo:create_schema();
+start_phase(start_cowboy, _StartType, []) ->
+  Port = application:get_env(pokenaka, http_port, 8080),
+  ListenerCount = application:get_env(pokenaka, http_listener_count, 10),
+
+  Handlers = [],
+  Trails = trails:trails(Handlers),
+  trails:store(Trails),
+
+  Dispatch = trails:single_host_compile(Trails),
+  TransOpts = [{port, Port}],
+  ProtoOpts = [{env, [{dispatch, Dispatch}, {compress, true}]}],
+
+  case cowboy:start_http(pokenaka, ListenerCount, TransOpts, ProtoOpts) of
+    {ok, _} -> ok;
+    {error, {already_started, _}} -> ok
+  end.
