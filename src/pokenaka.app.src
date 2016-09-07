@@ -1,10 +1,12 @@
-{application, pokenaka, [
-  {description, "Gonna catch 'em all!"},
-  {vsn, "1.0.0"},
-  {id, "pokenaka"},
-  {registered, []},
-  {applications, [kernel, stdlib]},
-  {modules, []},
-  {mod, {poke, noargs}},
-  {env, []}
- ]}.
+{ application
+, pokenaka
+, [ {description, "Gonna catch 'em all!"}
+  , {vsn, "1.0.0"}
+  , {id, "pokenaka"}
+  , {registered, []}
+  , {applications, [kernel, stdlib, mnesia, sumo_db]}
+  , {modules, []}
+  , {mod, {poke, noargs}}
+  , {start_phases , [{create_schema, []}]}
+  ]
+}.
