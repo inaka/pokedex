@@ -1,0 +1,11 @@
+## Name of the node
+-name pokenaka
+
+## Cookie for distributed erlang
+-setcookie catchemall
+
+## Enable SMP
+-smp enable
+
++K true
++A 30

@@ -1,3 +1,6 @@
+doc/
+Mnesia*/
+log/
 .eunit
 deps
 *.o
@@ -8,3 +11,6 @@ ebin
 rel/example_project
 .concrete/DEV_MODE
 .rebar
+_build/
+_checkouts/
+.DS_Store
