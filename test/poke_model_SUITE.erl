@@ -35,7 +35,9 @@ crud(_Config) ->
   38 = poke_pokemons:total_hp(Bulbasaur),
 
   ct:comment("Change the name"),
-  Luke = poke_pokemons_repo:update(poke_pokemons:name(Bulbasaur, <<"Luke">>)),
+  Luke =
+    poke_pokemons_repo:update(
+      poke_pokemons:update(Bulbasaur, #{<<"name">> => <<"Luke">>})),
   <<"Luke">> = poke_pokemons:name(Luke),
   <<"Bulbasaur">> = poke_pokemons:species(Luke),
 

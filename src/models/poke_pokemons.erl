@@ -19,11 +19,14 @@
    , updated_at := calendar:datetime()
    }.
 
+-type updates() :: map().
+
 -export_type(
   [ id/0
   , name/0
   , species/0
   , pokemon/0
+  , updates/0
   ]).
 
 %% sumo_doc behaviour callbacks
@@ -39,7 +42,9 @@
   , name/1
   , species/1
   , total_hp/1
-  , name/2
+  , to_json/1
+  , from_json/1
+  , update/2
   ]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,7 +55,7 @@
 sumo_schema() ->
   sumo:new_schema(
     pokemons,
-    [ sumo:new_field(id,          string,   [id, unique])
+    [ sumo:new_field(id,          binary,   [id, unique])
     , sumo:new_field(name,        string,   [not_null])
     , sumo:new_field(species,     string,   [not_null])
     , sumo:new_field(cp,          integer,  [not_null])
@@ -98,7 +103,36 @@ species(#{species := Species}) -> Species.
 -spec total_hp(pokemon()) -> pos_integer().
 total_hp(#{total_hp := TotalHP}) -> TotalHP.
 
--spec name(pokemon(), name()) -> pokemon().
-name(Pokemon, Name) ->
-  Pokemon#{name := Name, updated_at := calendar:universal_time()}.
+-spec to_json(pokemon()) -> map().
+to_json(Pokemon) ->
+  #{ id         => maps:get(id, Pokemon, null)
+   , name       => maps:get(name, Pokemon)
+   , species    => maps:get(species, Pokemon)
+   , cp         => maps:get(cp, Pokemon)
+   , hp         => maps:get(hp, Pokemon)
+   , total_hp   => maps:get(total_hp, Pokemon)
+   , height     => maps:get(height, Pokemon)
+   , weight     => maps:get(weight, Pokemon)
+   }.
 
+-spec from_json(map()) -> {ok, pokemon()} | {error, binary()}.
+from_json(Json) ->
+  try
+    Species = maps:get(<<"species">>, Json),
+    Name = maps:get(<<"name">>, Json, Species),
+    CP = maps:get(<<"cp">>, Json),
+    HP = maps:get(<<"hp">>, Json),
+    Height = maps:get(<<"height">>, Json),
+    Weight = maps:get(<<"weight">>, Json),
+    {ok, new(Name, Species, CP, HP, HP, Height, Weight)}
+  catch
+    _:{badkey, Key} ->
+      {error, <<"Missing field: ", Key/binary>>}
+  end.
+
+-spec update(pokemon(), updates()) -> pokemon().
+update(Pokemon, Updates) ->
+  Name = maps:get(<<"name">>, Updates, maps:get(name, Pokemon)),
+  Pokemon#{ name := Name
+          , updated_at := calendar:universal_time()
+          }.

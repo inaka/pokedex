@@ -42,7 +42,11 @@ start_phase(start_cowboy, _StartType, []) ->
   Port = application:get_env(pokenaka, http_port, 8080),
   ListenerCount = application:get_env(pokenaka, http_listener_count, 10),
 
-  Handlers = [],
+  Handlers =
+    [ poke_pokemons_handler
+    , poke_single_pokemon_handler
+    , cowboy_swagger_handler
+    ],
   Trails = trails:trails(Handlers),
   trails:store(Trails),
 
