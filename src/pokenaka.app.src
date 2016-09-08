@@ -4,9 +4,10 @@
   , {vsn, "1.0.0"}
   , {id, "pokenaka"}
   , {registered, []}
-  , {applications, [kernel, stdlib, mnesia, sumo_db]}
+  , {applications,
+      [kernel, stdlib, mnesia, sumo_db, jsx, cowboy, trails, cowboy_swagger]}
   , {modules, []}
   , {mod, {poke, noargs}}
-  , {start_phases , [{create_schema, []}]}
+  , {start_phases , [{create_schema, []}, {start_cowboy, []}]}
   ]
 }.
