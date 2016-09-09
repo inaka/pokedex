@@ -59,7 +59,7 @@ trails() ->
         , responses => Responses
         }
      , patch =>
-       # { tags => ["newspapers"]
+       # { tags => ["pokemons"]
          , description => "Updates a pokemon"
          , consumes => ["application/json"]
          , produces => ["application/json"]
