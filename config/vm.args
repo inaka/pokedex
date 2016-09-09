@@ -1,5 +1,5 @@
 ## Name of the node
--name pokenaka
+-name pokedex
 
 ## Cookie for distributed erlang
 -setcookie catchemall

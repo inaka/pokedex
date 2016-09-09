@@ -1,8 +1,8 @@
 { application
-, pokenaka
+, pokedex
 , [ {description, "Gonna catch 'em all!"}
   , {vsn, "1.0.0"}
-  , {id, "pokenaka"}
+  , {id, "pokedex"}
   , {registered, []}
   , {applications,
       [kernel, stdlib, mnesia, sumo_db, jsx, cowboy, trails, cowboy_swagger]}
