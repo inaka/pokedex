@@ -21,10 +21,11 @@
 -spec trails() -> trails:trails().
 trails() ->
   Id =
-    #{ name => <<"pokemon id">>
+    #{ name => id
+     , description => <<"pokemon id">>
      , in => path
+     , type => string
      , required => true
-     , schema => #{<<"type">> => <<"string">>}
      },
   RequestBody =
     #{ name => <<"request body">>
@@ -62,6 +63,7 @@ trails() ->
        #{ tags => ["pokemons"]
         , description => "Returns a pokemon"
         , produces => ["application/json"]
+        , parameters => [Id]
         , responses => Responses
         }
      , patch =>
@@ -69,13 +71,14 @@ trails() ->
          , description => "Updates a pokemon"
          , consumes => ["application/json"]
          , produces => ["application/json"]
-         , parameters => [Id, RequestBody]
+         , parameters => [RequestBody, Id]
          , responses => Responses
          }
      , delete =>
        #{ tags => ["pokemons"]
         , description => "Deletes a pokemon"
         , produces => ["application/json"]
+        , parameters => [Id]
         , responses => Responses
         }
      },
