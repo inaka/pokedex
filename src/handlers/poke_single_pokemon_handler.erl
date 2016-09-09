@@ -20,6 +20,12 @@
 
 -spec trails() -> trails:trails().
 trails() ->
+  Id =
+    #{ name => <<"pokemon id">>
+     , in => path
+     , required => true
+     , schema => #{<<"type">> => <<"string">>}
+     },
   RequestBody =
     #{ name => <<"request body">>
      , in => body
@@ -63,7 +69,7 @@ trails() ->
          , description => "Updates a pokemon"
          , consumes => ["application/json"]
          , produces => ["application/json"]
-         , parameters => [RequestBody]
+         , parameters => [Id, RequestBody]
          , responses => Responses
          }
      , delete =>
