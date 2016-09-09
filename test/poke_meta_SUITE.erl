@@ -10,4 +10,4 @@
 all() -> [dialyzer, elvis].
 
 -spec init_per_suite(ktn_meta_SUITE:config()) -> ktn_meta_SUITE:config().
-init_per_suite(Config) -> [{application, pokenaka} | Config].
+init_per_suite(Config) -> [{application, pokedex} | Config].

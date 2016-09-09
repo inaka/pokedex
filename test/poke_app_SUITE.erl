@@ -10,6 +10,6 @@ all() -> [run].
 -spec run(proplists:proplist()) -> {comment, []}.
 run(_Config) ->
   {ok, Apps} = poke:start(),
-  [pokenaka|_] = lists:reverse(Apps),
+  [pokedex|_] = lists:reverse(Apps),
   ok = poke:stop(),
   {comment, ""}.

@@ -152,7 +152,7 @@ api_call(Method, Path, Body) ->
 api_call(Method, Path, Hdrs, Json) when is_map(Json) ->
   api_call(Method, Path, Hdrs, jsx:encode(Json));
 api_call(Method, Path, Hdrs, Body) ->
-  Port = integer_to_binary(application:get_env(pokenaka, http_port, 8080)),
+  Port = integer_to_binary(application:get_env(pokedex, http_port, 8080)),
   BinPath = iolist_to_binary(Path),
   Url = <<"http://localhost:", Port/binary, BinPath/binary>>,
   ct:log("~p ~p -d '~p'", [Method, Url, Body]),
