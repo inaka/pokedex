@@ -2,25 +2,11 @@
 
 -export(
   [ capture/1
-  , capture/5
-  , capture/6
   , all/0
   , update/1
   , delete/1
   , fetch/1
   ]).
-
--spec capture(
-  poke_pokemons:species(), non_neg_integer(), non_neg_integer(),
-  float(), float()) -> poke_pokemons:pokemon().
-capture(Species, CP, HP, Height, Weight) ->
-  capture(Species, Species, CP, HP, Height, Weight).
-
--spec capture(
-  poke_pokemons:name(), poke_pokemons:species(), non_neg_integer(),
-  non_neg_integer(), float(), float()) -> poke_pokemons:pokemon().
-capture(Name, Species, CP, HP, Height, Weight) ->
-  capture(poke_pokemons:new(Name, Species, CP, HP, HP, Height, Weight)).
 
 -spec capture(poke_pokemons:pokemon()) -> poke_pokemons:pokemon().
 capture(Pokemon) -> sumo:persist(pokemons, Pokemon).
