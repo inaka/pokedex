@@ -1,6 +1,7 @@
 -module(poke_pokemons).
 
 -behaviour(sumo_doc).
+-behaviour(sumo_rest_doc).
 
 -type id() :: binary().
 -type name() :: binary().
@@ -43,6 +44,7 @@
   , to_json/1
   , from_json/1
   , update/2
+  , location/2
   ]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,10 +91,11 @@ new(Name, Species, CP, HP, TotalHP, Height, Weight) ->
    , updated_at => calendar:universal_time()
    }.
 
--spec id(pokemon()) -> id().
-id(#{id := Id}) -> Id.
+-spec id(pokemon()) -> undefined | id().
+id(#{id := Id}) -> Id;
+id(_) -> undefined.
 
--spec to_json(pokemon()) -> map().
+-spec to_json(pokemon()) -> sr_json:json().
 to_json(Pokemon) ->
   #{ id         => maps:get(id, Pokemon, null)
    , name       => maps:get(name, Pokemon)
@@ -119,9 +122,12 @@ from_json(Json) ->
       {error, <<"Missing field: ", Key/binary>>}
   end.
 
--spec update(pokemon(), updates()) -> pokemon().
+-spec update(pokemon(), updates()) -> {ok, pokemon()}.
 update(Pokemon, Updates) ->
   Name = maps:get(<<"name">>, Updates, maps:get(name, Pokemon)),
-  Pokemon#{ name := Name
-          , updated_at := calendar:universal_time()
-          }.
+  {ok, Pokemon#{ name := Name
+               , updated_at := calendar:universal_time()
+               }}.
+
+-spec location(pokemon(), sumo_rest_doc:path()) -> iodata().
+location(#{id := Id}, Root) -> [Root, $/, Id].
