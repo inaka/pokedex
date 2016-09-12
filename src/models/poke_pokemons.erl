@@ -39,9 +39,6 @@
 -export(
   [ new/7
   , id/1
-  , name/1
-  , species/1
-  , total_hp/1
   , to_json/1
   , from_json/1
   , update/2
@@ -93,15 +90,6 @@ new(Name, Species, CP, HP, TotalHP, Height, Weight) ->
 
 -spec id(pokemon()) -> id().
 id(#{id := Id}) -> Id.
-
--spec name(pokemon()) -> name().
-name(#{name := Name}) -> Name.
-
--spec species(pokemon()) -> species().
-species(#{species := Species}) -> Species.
-
--spec total_hp(pokemon()) -> pos_integer().
-total_hp(#{total_hp := TotalHP}) -> TotalHP.
 
 -spec to_json(pokemon()) -> map().
 to_json(Pokemon) ->

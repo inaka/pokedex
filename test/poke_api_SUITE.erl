@@ -104,7 +104,10 @@ crud(_Config) ->
 errors(_Config) ->
   ct:comment("Clean up pokedex and create one"),
   _ = sumo:delete_all(pokemons),
-  Ekans = poke_pokemons_repo:capture(<<"Ekans">>, 10, 20, 3.0, 4.0),
+  Ekans =
+    sumo:persist(
+      pokemons,
+      poke_pokemons:new(<<"Ekans">>, <<"Ekans">>, 10, 20, 20, 3.0, 4.0)),
   EkansId = poke_pokemons:id(Ekans),
   EkansUrl = <<"/pokemons/", EkansId/binary>>,
 
