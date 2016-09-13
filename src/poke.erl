@@ -45,6 +45,8 @@ start_phase(start_cowboy, _StartType, []) ->
   Handlers =
     [ poke_pokemons_handler
     , poke_single_pokemon_handler
+    , poke_species_handler
+    , poke_single_species_handler
     , cowboy_swagger_handler
     ],
   Trails = trails:trails(Handlers),
