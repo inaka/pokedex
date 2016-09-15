@@ -6,17 +6,18 @@
 -type name() :: binary().
 -type species() :: binary().
 
+%% NOTE: Fields should be mandatory, but dialyzer bug :(
 -opaque pokemon() ::
   #{ id         => id()
-   , name       := name()
-   , species    := species()
-   , cp         := non_neg_integer()
-   , hp         := non_neg_integer()
-   , total_hp   := pos_integer()
-   , height     := float()
-   , weight     := float()
-   , created_at := calendar:datetime()
-   , updated_at := calendar:datetime()
+   , name       => name()
+   , species    => species()
+   , cp         => non_neg_integer()
+   , hp         => non_neg_integer()
+   , total_hp   => pos_integer()
+   , height     => float()
+   , weight     => float()
+   , created_at => calendar:datetime()
+   , updated_at => calendar:datetime()
    }.
 
 -type updates() :: map().

@@ -117,8 +117,8 @@ errors(_Config) ->
   415 = api_call(patch, EkansUrl, Hdrs, {form, ""}),
 
   ct:comment("Bad json"),
-  {400, <<"Malformed JSON request">>} = api_call(post, "/pokemons", <<"{">>),
-  {400, <<"Malformed JSON request">>} = api_call(patch, EkansUrl, <<"{">>),
+  {400, _} = api_call(post, "/pokemons", <<"{">>),
+  {400, _} = api_call(patch, EkansUrl, <<"{">>),
 
   ct:comment("Missing fields"),
   {400, _} = api_call(post, "/pokemons", #{}),
