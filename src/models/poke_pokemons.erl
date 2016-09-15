@@ -111,6 +111,7 @@ to_json(Pokemon) ->
 from_json(Json) ->
   try
     Species = maps:get(<<"species">>, Json),
+    check_valid_species(Species),
     Name = maps:get(<<"name">>, Json, Species),
     CP = maps:get(<<"cp">>, Json),
     HP = maps:get(<<"hp">>, Json),
@@ -118,6 +119,8 @@ from_json(Json) ->
     Weight = maps:get(<<"weight">>, Json),
     {ok, new(Name, Species, CP, HP, HP, Height, Weight)}
   catch
+    _:{invalid_species, InvalidSpecies} ->
+      {error, <<"Invalid species: ", InvalidSpecies/binary>>};
     _:{badkey, Key} ->
       {error, <<"Missing field: ", Key/binary>>}
   end.
@@ -131,3 +134,9 @@ update(Pokemon, Updates) ->
 
 -spec location(pokemon(), sumo_rest_doc:path()) -> iodata().
 location(#{id := Id}, Root) -> [Root, $/, Id].
+
+check_valid_species(Species) ->
+  case poke_species_repo:exists(Species) of
+    true -> valid;
+    false -> throw({invalid_species, Species})
+  end.

@@ -4,6 +4,7 @@
 -export([init_per_suite/1, end_per_suite/1]).
 -export([pokemon_crud/1, pokemon_errors/1]).
 -export([species_crud/1, species_errors/1]).
+-export([valid_pokemon_species/1]).
 
 -type config() :: proplists:proplist().
 
@@ -12,6 +13,7 @@ all() -> [ pokemon_crud
          , pokemon_errors
          , species_crud
          , species_errors
+         , valid_pokemon_species
          ].
 
 -spec init_per_suite(config()) -> config().
@@ -30,9 +32,16 @@ end_per_suite(Config) ->
 pokemon_crud(_Config) ->
   ct:comment("Clean up pokedex"),
   _ = sumo:delete_all(pokemons),
+  _ = sumo:delete_all(species),
+
+  ct:comment("Create the required species"),
+  _ =
+    sumo:persist(
+      species, poke_species:new(<<"bulbasaur">>, [<<"grass">>, <<"poison">>])),
+  _ = sumo:persist(species, poke_species:new(<<"pikachu">>, [<<"electric">>])),
 
   ct:comment("Capture a pokemon, use default name"),
-  BulbaJson = #{ species => <<"Bulbasaur">>
+  BulbaJson = #{ species => <<"bulbasaur">>
                , cp => 90
                , hp => 38
                , height => 7.35
@@ -44,7 +53,7 @@ pokemon_crud(_Config) ->
   {200, [Bulbasaur]} = api_call(get, "/pokemons"),
 
   ct:comment("It has proper default values"),
-  #{ <<"name">> := <<"Bulbasaur">>
+  #{ <<"name">> := <<"bulbasaur">>
    , <<"total_hp">> := 38
    , <<"id">> := BulbasaurId
    } = Bulbasaur,
@@ -54,7 +63,7 @@ pokemon_crud(_Config) ->
   LukeUrl = <<"/pokemons/", BulbasaurId/binary>>,
   {200, Luke} = api_call(patch, LukeUrl, LukeJson),
   #{ <<"name">> := <<"Luke">>
-   , <<"species">> := <<"Bulbasaur">>
+   , <<"species">> := <<"bulbasaur">>
    , <<"id">> := BulbasaurId
    } = Luke,
 
@@ -65,7 +74,7 @@ pokemon_crud(_Config) ->
   {200, [Luke]} = api_call(get, "/pokemons"),
 
   ct:comment("New pokemon with name added"),
-  KaliJson = #{ species => <<"Pikachu">>
+  KaliJson = #{ species => <<"pikachu">>
               , name => <<"Kali">>
               , cp => 234
               , hp => 100
@@ -74,7 +83,7 @@ pokemon_crud(_Config) ->
               },
   {201, Kali} = api_call(post, "/pokemons", KaliJson),
   #{ <<"name">> := <<"Kali">>
-   , <<"species">> := <<"Pikachu">>
+   , <<"species">> := <<"pikachu">>
    , <<"id">> := KaliId
    } = Kali,
 
@@ -257,6 +266,28 @@ species_errors(_Config) ->
   ct:comment("Conflict"),
   {409, _} =
     api_call(post, "/species", #{name => <<"weedle">>, types => [<<"bug">>]}),
+
+  {comment, ""}.
+
+-spec valid_pokemon_species(config()) -> {comment, []}.
+valid_pokemon_species(_Config) ->
+  ct:comment("Clean up species and pokemons and create one"),
+  _ = sumo:delete_all(pokemons),
+  _ = sumo:delete_all(species),
+  _ = sumo:persist(species, poke_species:new(<<"pidgey">>, [<<"flying">>])),
+
+  ct:comment("A pokemon with invalid species is rejected"),
+  BadJson = #{ species => <<"pikachu">>
+             , cp => 90
+             , hp => 38
+             , height => 7.35
+             , weight => 0.69
+             },
+  {400, _} = api_call(post, "/pokemons", BadJson),
+
+  ct:comment("A pokemon with proper species is accepted"),
+  GoodJson = BadJson#{species => <<"pidgey">>},
+  {201, _} = api_call(post, "/pokemons", GoodJson),
 
   {comment, ""}.
 
