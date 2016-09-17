@@ -5,7 +5,8 @@
   , {id, "pokedex"}
   , {registered, []}
   , {applications,
-      [kernel, stdlib, mnesia, sumo_db, jsx, cowboy, trails, cowboy_swagger]}
+      [kernel, stdlib, mnesia, sumo_db, jsx, cowboy, trails, cowboy_swagger,
+       sumo_rest]}
   , {modules, []}
   , {mod, {poke, noargs}}
   , {start_phases , [{create_schema, []}, {start_cowboy, []}]}
